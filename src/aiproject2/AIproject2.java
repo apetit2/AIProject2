@@ -36,30 +36,22 @@ public class AIproject2 extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        //this is what we would call if we want to have a UI
         //launch(args);
         
         //are we first
         boolean first = false;
-        
-        //state of the board
-        ArrayList<ArrayList<Node>> board = new ArrayList<>();
-        
-        //initialize the board
-        for(int i = 0; i < 15; i++){
-            ArrayList<Node> nodes = new ArrayList<>();
-            board.add(nodes);
-            for(int j = 0; j < 15; j++){
-                Node node = new Node();
-                board.get(i).add(node);
-            }
-        }
         
         //end_game file, go file, and move file names
         String goTime = "fuckers.go"; //change based upon what we want the program name to be
         String endTime = "end_game";
         String moveName = "move_file";
         
-        //check if files are there
+        //initialize the board
+        ArrayList<ArrayList<Node>> board = Utils.initBoard();
+        
+        //check if end file is in the directory
         boolean checkEnd = new File(endTime).exists();
         System.out.println("CheckEnd: " + checkEnd);
         
@@ -78,7 +70,7 @@ public class AIproject2 extends Application {
                 String[] priorMove;
                 int column, row;
                 
-                //read previously made move (if not first move)
+                //read previously made move (if not first move) 
                 try {
                     
                    //needed to read in the file 
@@ -101,15 +93,7 @@ public class AIproject2 extends Application {
                        row = Integer.parseInt(priorMove[2]);
                        
                        //update the board to reflect the previous move
-                       if(first == false){ //we are black - they are white
-                           board.get(column).get(row).setColor("white");
-                           board.get(column).get(row).setProgram(priorMove[0]);
-                           
-                       } else { //we are white - they are black
-                           board.get(column).get(row).setColor("black");
-                           board.get(column).get(row).setProgram(priorMove[0]);
-                           
-                       }
+                       Utils.updateBoard(board, column, row, priorMove[0], first);
                        
                    }
                   
@@ -124,6 +108,9 @@ public class AIproject2 extends Application {
                 
                 
                 
+                
+
+
                 //write our move out
                 FileWriter fw = null;
                 try{
@@ -143,6 +130,8 @@ public class AIproject2 extends Application {
             //continue to loop and wait for our next turn
             checkEnd = new File(endTime).exists();
             System.out.println("CheckEnd: " + checkEnd);
+            
+            //we might need to make a check for the opponent file here and wait until it appears before continuing the loop
         }
     }
     
