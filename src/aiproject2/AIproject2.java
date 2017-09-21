@@ -112,18 +112,8 @@ public class AIproject2 extends Application {
 
 
                 //write our move out
-                FileWriter fw = null;
-                try{
-                    fw = new FileWriter(moveName, false);
-                    fw.write(ourMove);
-                    fw.close();
-                } catch (IOException e){
-                    System.out.println(e.getMessage());
-                    //something went very wrong -- we'll just forfeit if this happens
-                    //let the referee timeout - so maybe use wait
-                }
-                
-                //move is over now
+                Utils.writeMove(moveName, ourMove);
+                //move should be over now
             }
             
             //check again to see if the end file is there, and if not we 
