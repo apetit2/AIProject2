@@ -15,7 +15,7 @@ public class Node {
     
     private String color;
     private String program;
-    private Boolean isOurNode;
+    private boolean isOurNode;
     private ArrayList<ArrayList<Node>> children; 
     
     //constructor
@@ -48,11 +48,11 @@ public class Node {
         this.children = nodes;
     }
     
-    public void setIsOurNode(Boolean isOurNode){
+    public void setIsOurNode(boolean isOurNode){
         this.isOurNode = isOurNode;
     }
     
-    public Boolean getIsOurNode(){
+    public boolean getIsOurNode(){
         return this.isOurNode;
     }
     

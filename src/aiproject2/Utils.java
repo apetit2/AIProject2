@@ -100,13 +100,13 @@ public class Utils {
     // to choose that node next
     // UPDATE THIS FUNCTION TO PROPERLY DO MAXIMIZER MINIZER STUFF
     // UPDATE THIS FUNCTION TO BE MORE EFFICIENT
-    public int Hvalue(ArrayList<ArrayList<Node>> board, int col, int row, String playerColor){
+    public int Hvalue(ArrayList<ArrayList<Node>> board, int col, int row){
         int accumulator = 0;      // stores the largest possible combo,
-        if (board.get(col).get(row).getIsOurNode() == null) { //if this node is empty
-            int HorizontalValueHolder = HorizontalValue(board, col, row, playerColor);     // use holder so code doesnt need to make multiple passes through same function
-            int VerticalValueHolder = VerticalValue(board, col, row, playerColor);
-            int FdiagonalValueHolder = FdiagonalValue(board, col, row, playerColor);
-            int RdiagonalValueHolder = RdiagonalValue(board, col, row, playerColor);
+        if (board.get(col).get(row).getProgram() == null) { //if this node is empty
+            int HorizontalValueHolder = HorizontalValue(board, col, row);     // use holder so code doesnt need to make multiple passes through same function
+            int VerticalValueHolder = VerticalValue(board, col, row);
+            int FdiagonalValueHolder = FdiagonalValue(board, col, row);
+            int RdiagonalValueHolder = RdiagonalValue(board, col, row);
             //Pretty sure there a function that can pick the highest value out of this set of 4
             if (HorizontalValueHolder  > accumulator){
                 accumulator = HorizontalValueHolder;  
@@ -129,17 +129,17 @@ public class Utils {
     // this function assumes that the node at X,Y is empty and looks at the nodes in X+-1 to see if they are occupied by
     // the passed player. If they are, it looks at the nodes beyond those, in the same line
     //PROBABLY NEEDS DEBUGGING BUT ASSUME IT WORKS
-    public int HorizontalValue(ArrayList<ArrayList<Node> > board, int col, int row, String playerColor){
+    public int HorizontalValue(ArrayList<ArrayList<Node> > board, int col, int row){
         int accumulator = 0;
         int mod = 1;
         // These will need to be fixed but basically this
-        while ((board.get(col - mod).get(row).getColor().equals(playerColor)) && (mod < col)){  //check nodes to the right
+        while ((board.get(col - mod).get(row).getIsOurNode() == true) && (mod < col)){  //check nodes to the right
             accumulator++;
             mod ++;
         }
       
         mod = 1;
-        while((board.get(col + mod).get(row).getColor().equals(playerColor)) && ((mod + col) < 15)){  //check nodes to the left
+        while((board.get(col + mod).get(row).getIsOurNode() == true) && ((mod + col) < 15)){  //check nodes to the left
             accumulator++;
             mod ++;
         }
@@ -151,16 +151,16 @@ public class Utils {
     // this function assumes that the node at X,Y is empty and looks at the nodes in Y+-1 to see if they are occupied by
     // the passed player. If they are, it looks at the nodes beyond those, in the same line
     //PROBABLY NEEDS DEBUGGING BUT ASSUME IT WORKS
-    public int VerticalValue(ArrayList<ArrayList<Node> > board, int col, int row, String playerColor){
+    public int VerticalValue(ArrayList<ArrayList<Node> > board, int col, int row){
         int accumulator = 0;
         int mod = 1;
         // These will need to be fixed but basically this
-        while ((board.get(col).get(row - mod).getColor().equals(playerColor)) && (mod < row)){  //check nodes below
+        while ((board.get(col).get(row - mod).getIsOurNode() == true) && (mod < row)){  //check nodes below
             accumulator++;
             mod ++;
         }
         mod = 1;
-        while((board.get(col).get(row + mod).getColor().equals(playerColor)) && ((mod + row) < 15)){  //check nodes above
+        while((board.get(col).get(row + mod).getIsOurNode() == true) && ((mod + row) < 15)){  //check nodes above
             accumulator++;
             mod++;
         }
@@ -170,16 +170,16 @@ public class Utils {
     // this function assumes that the node at X,Y is empty and looks at the nodes in X-1 Y-1 , X+1 Y+1 to see if they are occupied by
     // the passed player. If they are, it looks at the nodes beyond those, in the same line
     //PROBABLY NEEDS DEBUGGING BUT ASSUME IT WORKS
-    public int FdiagonalValue(ArrayList<ArrayList<Node> > board, int col, int row, String playerColor){
+    public int FdiagonalValue(ArrayList<ArrayList<Node> > board, int col, int row){
         int accumulator = 0;
         int mod = 1;
         // These will need to be fixed but basically this
-        while ((board.get(col - mod).get(row - mod).getColor().equals(playerColor)) && (mod < row) && (mod < col)){  //check nodes to the lower right
+        while ((board.get(col - mod).get(row - mod).getIsOurNode() == true) && (mod < row) && (mod < col)){  //check nodes to the lower right
             accumulator++;
             mod ++;
         }
         mod = 1;
-        while((board.get(col + mod).get(row + mod).getColor().equals(playerColor)) && ((mod + col) < 15) && ((mod + row) < 15)){  //check nodes to the upper left
+        while((board.get(col + mod).get(row + mod).getIsOurNode() == true) && ((mod + col) < 15) && ((mod + row) < 15)){  //check nodes to the upper left
             accumulator++;
             mod ++;
         }
@@ -189,16 +189,16 @@ public class Utils {
     // this function assumes that the node at X,Y is empty and looks at the nodes in X-1 Y+1 , X+1 Y-1 to see if they are occupied by
     // the passed player. If they are, it looks at the nodes beyond those, in the same line
     //PROBABLY NEEDS DEBUGGING BUT ASSUME IT WORKS
-    public int RdiagonalValue(ArrayList<ArrayList<Node> > board, int col, int row, String playerColor){
+    public int RdiagonalValue(ArrayList<ArrayList<Node> > board, int col, int row){
         int accumulator = 0;
         int mod = 1;
         // These will need to be fixed but basically this
-        while ((board.get(col - mod).get(row - mod).getColor().equals(playerColor)) && (mod < row) && (mod < col)){  //check nodes to the upper right
+        while ((board.get(col - mod).get(row - mod).getIsOurNode() == true) && (mod < row) && (mod < col)){  //check nodes to the upper right
             accumulator++;
             mod ++;
         }
         mod = 1;
-        while((board.get(col - mod).get(row - mod).getColor().equals(playerColor)) && (mod < row) && (mod < col)){  //check nodes to the lower left
+        while((board.get(col - mod).get(row - mod).getIsOurNode() == true) && (mod < row) && (mod < col)){  //check nodes to the lower left
             accumulator++;
             mod ++;
         }
