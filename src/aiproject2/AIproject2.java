@@ -44,7 +44,7 @@ public class AIproject2 extends Application {
         boolean first = false;
         
         //end_game file, go file, and move file names
-        String goTime = "fuckers.go"; //change based upon what we want the program name to be
+        String goTime = "program.go"; //change based upon what we want the program name to be
         String endTime = "end_game";
         String moveName = "move_file";
         
