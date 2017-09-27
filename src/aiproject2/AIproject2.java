@@ -44,7 +44,7 @@ public class AIproject2 extends Application {
         boolean first = false;
         
         //end_game file, go file, and move file names
-        String goTime = "Example.go"; //change based upon what we want the program name to be
+        String goTime = "b.go"; //change based upon what we want the program name to be
         String endTime = "end_game";
         String moveName = "move_file";
         
@@ -103,8 +103,10 @@ public class AIproject2 extends Application {
                    } else {
                        //a move was made read it in
                        priorMove = sCurrentLine.split(" ");
-                       column = Character.getNumericValue(priorMove[1].charAt(0));
+                       char tmp = priorMove[1].charAt(0);
                        row = Integer.parseInt(priorMove[2]);
+                       
+                       column = tmp - 'a' + 1;
                        
                        System.out.println(priorMove[1]);
                        System.out.println(priorMove[2]);
@@ -141,7 +143,7 @@ public class AIproject2 extends Application {
                 }
                 
                 n.setIsOurNode(true);
-                n.setProgram("Example");
+                n.setProgram("b");
                 
                 
                 board[n.getX()][n.getY()] = n;
