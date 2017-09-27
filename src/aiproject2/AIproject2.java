@@ -104,7 +104,7 @@ public class AIproject2 extends Application {
                 }
                 
                 //make our move here
-                Node n = Utils.minimax(board, 5, true, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+                Node n =  Utils.callMiniMax(board);
                 System.out.print(n.getX());
                 System.out.print(n.getY());
                 
