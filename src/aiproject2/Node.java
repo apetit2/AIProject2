@@ -12,11 +12,14 @@ import java.util.ArrayList;
  * @author apand
  */
 public class Node {
-    
+   
+	private double miniMaxVal;
+	private int x;
+	private int y;
     private String color;
     private String program;
     private boolean isOurNode;
-    private ArrayList<ArrayList<Node>> children; 
+    private ArrayList<Node> children; 
     
     //constructor
     public Node(){
@@ -24,6 +27,30 @@ public class Node {
     }
     
     //getters + setters
+    public double getMiniMaxVal() {
+    	return this.miniMaxVal;
+    }
+    
+    public void setMiniMaxVal(double miniMaxVal) {
+    	this.miniMaxVal = miniMaxVal;
+    }
+    
+    public int getX() {
+    	return this.x;
+    }
+    
+    public void setX(int x) {
+    	this.x = x;
+    }
+    
+    public int getY() {
+    	return this.y;
+    }
+    
+    public void setY(int y) {
+    	this.y = y;
+    }
+    
     public String getColor(){
         return this.color;
     }
@@ -40,11 +67,11 @@ public class Node {
         this.program = program;
     }
     
-    public ArrayList<ArrayList<Node>> getChildren(){
+    public ArrayList<Node> getChildren(){
         return this.children;
     }
     
-    public void setChildren(ArrayList<ArrayList<Node>> nodes){
+    public void setChildren(ArrayList<Node> nodes){
         this.children = nodes;
     }
     

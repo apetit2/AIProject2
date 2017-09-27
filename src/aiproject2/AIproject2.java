@@ -44,12 +44,12 @@ public class AIproject2 extends Application {
         boolean first = false;
         
         //end_game file, go file, and move file names
-        String goTime = "program.go"; //change based upon what we want the program name to be
+        String goTime = "AIProject2.go"; //change based upon what we want the program name to be
         String endTime = "end_game";
         String moveName = "move_file";
         
         //initialize the board
-        ArrayList<ArrayList<Node>> board = Utils.initBoard();
+        Node[][] board = Utils.initBoard();
         
         //check if end file is in the directory
         boolean checkEnd = new File(endTime).exists();
@@ -107,9 +107,11 @@ public class AIproject2 extends Application {
                 String ourMove = "";
                 
                 
+                Node n = Utils.minimax(board, 5, true, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+                System.out.print(n.getX());
+                System.out.print(n.getY());
                 
-                
-
+                ourMove = "AIProject2 " + n.getX() + " " + n.getY();
 
                 //write our move out
                 Utils.writeMove(moveName, ourMove);
@@ -126,3 +128,4 @@ public class AIproject2 extends Application {
     }
     
 }
+
