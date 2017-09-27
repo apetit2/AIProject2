@@ -13,9 +13,9 @@ import java.util.ArrayList;
  */
 public class Node {
    
-	private double miniMaxVal;
-	private int x;
-	private int y;
+    private double miniMaxVal;
+    private int x;
+    private int y;
     private String color;
     private String program;
     private boolean isOurNode;

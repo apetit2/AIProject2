@@ -33,8 +33,8 @@ public class Utils {
     /**
      * Updates the gomoku board with the past move of our opponent
      * @param board - current state of the gomoku board
-     * @param col - column of the previous move
-     * @param row - row of the previous move
+     * @param x - column of the previous move
+     * @param y - row of the previous move
      * @param program - program name of the opponent program
      * @param isFirst - true if our program is first otherwise the opponent program is first
      */
@@ -86,6 +86,12 @@ public class Utils {
                         }
                 }
         } 
+    }
+    
+    //literally just calls the minimax function
+    public static Node callMiniMax(Node[][] board) {
+    	int miniMaxDepth = 5;
+    	return minimax(board, miniMaxDepth, true, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
     }
     
   //determines the best possible next move given a board
@@ -156,9 +162,15 @@ public class Utils {
     
     //What we need is a new HValue function that evaluates the ENTIRE board and returns a score
     public static int evalBoard(Node[][] board){
-    	return 0;
-        
+    	int score = 0; 
+    	ArrayList<Node> moves = getMoves(board);
+    	
+    	for(Node move : moves) {
+    		score += Hvalue(board, move.getX(), move.getY(), move.getColor().equals(ourColor));
+    	}
+    	return score;
     }
+    
     // returns the Hvalue of a node based on the nodes around it.
     // the Hvalue is the largest combo that would be possible if Maximizer/Minimizer
     // were to choose that node next

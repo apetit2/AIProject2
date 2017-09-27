@@ -104,14 +104,11 @@ public class AIproject2 extends Application {
                 }
                 
                 //make our move here
-                String ourMove = "";
-                
-                
                 Node n = Utils.minimax(board, 5, true, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
                 System.out.print(n.getX());
                 System.out.print(n.getY());
                 
-                ourMove = "AIProject2 " + n.getX() + " " + n.getY();
+                String ourMove = "AIProject2 " + n.getX() + " " + n.getY();
 
                 //write our move out
                 Utils.writeMove(moveName, ourMove);
