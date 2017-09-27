@@ -8,6 +8,7 @@ package aiproject2;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -40,16 +41,20 @@ public class Utils {
      */
     public static void updateBoard(Node[][] board, int x, int y, String program, boolean isFirst){
         if(isFirst == false){ //we are black - they are white
-            board[x][y].setColor("white");
-            board[x][y].setProgram(program);
-            board[x][y].setIsOurNode(false);
+            Node n = new Node();
+            n.setColor("white");
+            n.setProgram(program);
+            n.setIsOurNode(false);
+            board[x][y] = n;
             Utils.ourColor = "black";
             Utils.theirColor = "white";
                            
         } else { //we are white - they are black
-            board[x][y].setColor("black");
-            board[x][y].setProgram(program);
-            board[x][y].setIsOurNode(false);
+            Node n = new Node();
+            n.setColor("black");
+            n.setProgram(program);
+            n.setIsOurNode(false);
+            board[x][y] = n;
             Utils.ourColor = "white";
             Utils.theirColor = "black";
         }
@@ -100,7 +105,7 @@ public class Utils {
         ArrayList<Node> moves = getMoves(board);
     	
     	if (moves.isEmpty() || depth == 0) {//if we're done
-    		bestNode.setMiniMaxVal(evalBoard(board));
+    		bestNode.setMiniMaxVal(evalBoard(board, isMax));
     	}
     	
     	else {
@@ -233,13 +238,15 @@ public class Utils {
     }
     
     //What we need is a new HValue function that evaluates the ENTIRE board and returns a score
-    public static int evalBoard(Node[][] board){
+    public static int evalBoard(Node[][] board, boolean isMax){
     	int score = 0; 
     	ArrayList<Node> moves = getMoves(board);
-    	
+        System.out.println(Arrays.toString(moves.toArray()));
+    	System.out.println(ourColor);
+        
     	for(Node move : moves) {
-    		score += Hvalue(board, move.getX(), move.getY(), move.getColor().equals(ourColor));
-    	}
+    		score += Hvalue(board, move.getX(), move.getY(), isMax);
+        }
     	return score;
     }
     
@@ -252,8 +259,13 @@ public class Utils {
     // -the maximum posssible length of that line (without being blocked)
     // -if defensive moves are more valuable
     public static int Hvalue(Node[][] board, int x, int y, boolean isMax){
+        System.out.println("got here");
+        //System.out.println(board[x][y].getColor());
+        System.out.println(x);
+        System.out.println(y);
+        System.out.println(board[x][y]);
         int accumulator = 0;      // stores the largest possible combo,
-        if (board[x][y].getProgram() == null) { //if this node is empty
+        if (board[x][y] == null) { //if this node is empty
             int HorizontalValueHolder = HorizontalValue(board, x, y, isMax);     // use holder so code doesnt need to make multiple passes through same function
             int VerticalValueHolder = VerticalValue(board, x, y, isMax);
             int FdiagonalValueHolder = FdiagonalValue(board, x, y, isMax);
@@ -289,15 +301,25 @@ public class Utils {
         int accumulator = 0;
         int mod = 1;
         // These will need to be fixed but basically this
-        while ((board[x - mod][y].getIsOurNode() == isOurTurn) && (mod < x)){  //check nodes to the right
-            accumulator++;
-            mod ++;
+        if(x != 0){
+            while ((board[x - mod][y] != null) && (mod < x)){  //check nodes to the right
+                if(board[x - mod][y].getIsOurNode() == isOurTurn){
+                    break;
+                }
+                accumulator++;
+                mod ++;
+            }
         }
       
         mod = 1;
-        while((board[x + mod][y].getIsOurNode() == isOurTurn) && ((mod + x) < 15)){  //check nodes to the left
-            accumulator++;
-            mod ++;
+        if(x != 14){
+            while((board[x + mod][y] != null) && ((mod + x) < 14)){  //check nodes to the left
+                if(board[x + mod][y].getIsOurNode() == isOurTurn){
+                    break;
+                }
+                accumulator++;
+                mod ++;
+            }
         }
    
         return accumulator;
@@ -311,14 +333,24 @@ public class Utils {
         int accumulator = 0;
         int mod = 1;
         // These will need to be fixed but basically this
-        while ((board[x][y - mod].getIsOurNode() == isOurTurn) && (mod < y)){  //check nodes below
-            accumulator++;
-            mod ++;
+        if(y != 0){
+            while ((board[x][y - mod] != null) && (mod < y)){  //check nodes below
+                if(board[x][y - mod].getIsOurNode() == isOurTurn){
+                    break;
+                }
+                accumulator++;
+                mod ++;
+            }
         }
         mod = 1;
-        while((board[x][y + mod].getIsOurNode() == isOurTurn) && ((mod + y) < 15)){  //check nodes above
-            accumulator++;
-            mod++;
+        if(y != 14){
+            while((board[x][y + mod] != null) && ((mod + y) < 14)){  //check nodes above
+                if(board[x][y + mod].getIsOurNode() == isOurTurn){
+                    break;
+                }
+                accumulator++;
+                mod++;
+            }
         }
         return accumulator;
     }
@@ -330,14 +362,24 @@ public class Utils {
         int accumulator = 0;
         int mod = 1;
         // These will need to be fixed but basically this
-        while ((board[x - mod][y - mod].getIsOurNode() == isOurTurn) && (mod < y) && (mod < x)){  //check nodes to the lower right
-            accumulator++;
-            mod ++;
+        if((x != 0) && (y != 0)){
+            while ((board[x - mod][y - mod] != null) && (mod < y) && (mod < x)){  //check nodes to the lower right
+                if(board[x - mod][y - mod].getIsOurNode() == isOurTurn){
+                    break;
+                }
+                accumulator++;
+                mod ++;
+            }
         }
         mod = 1;
-        while((board[x + mod][y + mod].getIsOurNode() == isOurTurn) && ((mod + x) < 15) && ((mod + y) < 15)){  //check nodes to the upper left
-            accumulator++;
-            mod ++;
+        if((x != 14) && (y != 14)){
+            while((board[x + mod][y + mod] != null) && ((mod + x) < 14) && ((mod + y) < 14)){  //check nodes to the upper left
+                if(board[x + mod][y + mod].getIsOurNode() == isOurTurn){
+                    break;
+                }
+                accumulator++;
+                mod ++;
+            }
         }
         return accumulator;
     }
@@ -349,14 +391,24 @@ public class Utils {
         int accumulator = 0;
         int mod = 1;
         // These will need to be fixed but basically this
-        while ((board[x - mod][y - mod].getIsOurNode() == isOurTurn) && (mod < y) && (mod < x)){  //check nodes to the upper right
-            accumulator++;
-            mod ++;
+        if((x != 0) && (y != 14)){
+            while ((board[x - mod][y + mod] != null) && ((mod + y) < 14) && (mod < x)){  //check nodes to the upper right
+                if(board[x - mod][y + mod].getIsOurNode() == isOurTurn){
+                    break;
+                }
+                accumulator++;
+                mod ++;
+            }
         }
         mod = 1;
-        while((board[x - mod][y - mod].getIsOurNode() == isOurTurn) && (mod < y) && (mod < x)){  //check nodes to the lower left
-            accumulator++;
-            mod ++;
+        if((y != 0) && (x != 14)){
+            while((board[x + mod][y - mod] != null) && (mod < y) && ((mod + x) < 14)){  //check nodes to the lower left
+                if(board[x + mod][y - mod].getIsOurNode() == isOurTurn){
+                    break;
+                }
+                accumulator++;
+                mod ++;
+            }
         }
         return accumulator;
     }

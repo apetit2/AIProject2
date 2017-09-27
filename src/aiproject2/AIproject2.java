@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 //UI Framework Stuff
 import javafx.application.Application;
@@ -99,6 +100,9 @@ public class AIproject2 extends Application {
                        priorMove = sCurrentLine.split(" ");
                        column = Integer.parseInt(priorMove[1]);
                        row = Integer.parseInt(priorMove[2]);
+                       
+                       System.out.println(priorMove[1]);
+                       System.out.println(priorMove[2]);
                        
                        //update the board to reflect the previous move
                        Utils.updateBoard(board, column, row, priorMove[0], first);

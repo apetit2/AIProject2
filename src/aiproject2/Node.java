@@ -23,7 +23,8 @@ public class Node {
     
     //constructor
     public Node(){
-        
+        this.program = "";
+        this.color = "";
     }
     
     //getters + setters
@@ -81,6 +82,11 @@ public class Node {
     
     public boolean getIsOurNode(){
         return this.isOurNode;
+    }
+    
+    @Override
+    public String toString() {
+        return "Color: " + this.color + " Program: " + this.program + " X: " + this.x + "Y: " + this.y;
     }
     
 }
