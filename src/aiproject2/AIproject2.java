@@ -8,11 +8,9 @@ package aiproject2;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 //UI Framework Stuff
 import javafx.application.Application;
@@ -75,7 +73,7 @@ public class AIproject2 extends Application {
             //check if our go file is in the directory or not
             boolean checkTurn = new File(goPath).exists();
             System.out.println("Checkturn: " + checkTurn);
-            
+            Node n = null;
             //if it is, we make a move
             if(checkTurn == true){
                 
@@ -100,11 +98,12 @@ public class AIproject2 extends Application {
                        //no prior move was made
                        //we are going first - so we are white
                        first = true;
+                       br.close();
                        
                    } else {
                        //a move was made read it in
                        priorMove = sCurrentLine.split(" ");
-                       column = Integer.parseInt(priorMove[1]);
+                       column = Character.getNumericValue(priorMove[1].charAt(0));
                        row = Integer.parseInt(priorMove[2]);
                        
                        System.out.println(priorMove[1]);
@@ -113,6 +112,10 @@ public class AIproject2 extends Application {
                        //update the board to reflect the previous move
                        Utils.updateBoard(board, column, row, priorMove[0], first);
                        
+                       br.close();
+                       
+                       //make our move
+                       n =  Utils.callMiniMax(board);
                    }
                   
                 } catch (IOException e){
@@ -122,7 +125,13 @@ public class AIproject2 extends Application {
                 }
                 
                 //make our move here
-                Node n =  Utils.callMiniMax(board);
+                if(n == null){
+                    Random rn = new Random();
+                 
+                    n = new Node();
+                    n.setX(rn.nextInt(10 - 5 + 1) + 5);
+                    n.setY(rn.nextInt(10 - 5 + 1) + 5);
+                }
                 System.out.println(n.getX());
                 System.out.println(n.getY());
                 if(first){
@@ -137,12 +146,12 @@ public class AIproject2 extends Application {
                 
                 board[n.getX()][n.getY()] = n;
                 
-                String ourMove = n.getProgram() + " " + n.getX() + " " + n.getY();
-
-                moveFile = new File(movePath);
-                moveFile.delete();
+                char outChar = (char) (n.getX() + 64);
+                
+                String ourMove = n.getProgram() + " " + outChar + " " + n.getY();
+                
                 //write our move out
-                Utils.writeMove(moveName, ourMove);
+                Utils.writeMove(movePath, ourMove);
                 //move should be over now
                 
                 while((checkTurn = new File(goPath).exists()) == true){

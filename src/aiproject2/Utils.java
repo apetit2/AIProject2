@@ -6,7 +6,6 @@
 package aiproject2;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,15 +70,16 @@ public class Utils {
         BufferedWriter fw = null;
         try{
             System.out.println(ourMove);
-            fw = new BufferedWriter( new FileWriter(fileName, false));
+            fw = new BufferedWriter( new FileWriter(fileName, true));
             fw.write(ourMove);
+            fw.close();
+            
         } catch (IOException e){
             System.out.println(e.getMessage());
             //something went very wrong -- we'll just forfeit if this happens
             //let the referee timeout - so maybe use wait
         } finally {
             try {
-                System.out.println("got here");
                 if(fw != null){
                     fw.close();
                 }
@@ -87,6 +87,8 @@ public class Utils {
                 System.out.println(e.getMessage());
             }
         }
+        
+        
     }
     
     // NOT DONE
