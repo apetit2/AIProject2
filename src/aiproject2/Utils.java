@@ -5,6 +5,8 @@
  */
 package aiproject2;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,15 +68,24 @@ public class Utils {
      * @param ourMove - the string containing our move that we are writing out to
      */
     public static void writeMove(String fileName, String ourMove){
-        FileWriter fw = null;
+        BufferedWriter fw = null;
         try{
-            fw = new FileWriter(fileName, false);
+            System.out.println(ourMove);
+            fw = new BufferedWriter( new FileWriter(fileName, false));
             fw.write(ourMove);
-            fw.close();
         } catch (IOException e){
             System.out.println(e.getMessage());
             //something went very wrong -- we'll just forfeit if this happens
             //let the referee timeout - so maybe use wait
+        } finally {
+            try {
+                System.out.println("got here");
+                if(fw != null){
+                    fw.close();
+                }
+            } catch (IOException e){
+                System.out.println(e.getMessage());
+            }
         }
     }
     
@@ -115,6 +126,8 @@ public class Utils {
     				tempBoard[move.getX()][move.getY()] = move;
     				
     				double score = minimax(tempBoard,depth-1,false,alpha,beta).getMiniMaxVal();
+                                
+                                System.out.println("Score: "  + score);
     				
     				if(score > alpha) {
     					alpha = score;
@@ -233,7 +246,7 @@ public class Utils {
                 }
             }
     	}
-    	
+    	System.out.println(Arrays.toString(moves.toArray()));
     	return moves;
     }
     
@@ -241,8 +254,6 @@ public class Utils {
     public static int evalBoard(Node[][] board, boolean isMax){
     	int score = 0; 
     	ArrayList<Node> moves = getMoves(board);
-        System.out.println(Arrays.toString(moves.toArray()));
-    	System.out.println(ourColor);
         
     	for(Node move : moves) {
     		score += Hvalue(board, move.getX(), move.getY(), isMax);
@@ -259,11 +270,6 @@ public class Utils {
     // -the maximum posssible length of that line (without being blocked)
     // -if defensive moves are more valuable
     public static int Hvalue(Node[][] board, int x, int y, boolean isMax){
-        System.out.println("got here");
-        //System.out.println(board[x][y].getColor());
-        System.out.println(x);
-        System.out.println(y);
-        System.out.println(board[x][y]);
         int accumulator = 0;      // stores the largest possible combo,
         if (board[x][y] == null) { //if this node is empty
             int HorizontalValueHolder = HorizontalValue(board, x, y, isMax);     // use holder so code doesnt need to make multiple passes through same function

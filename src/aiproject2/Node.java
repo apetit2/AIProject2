@@ -86,7 +86,7 @@ public class Node {
     
     @Override
     public String toString() {
-        return "Color: " + this.color + " Program: " + this.program + " X: " + this.x + "Y: " + this.y;
+        return "Color: " + this.color + " Program: " + this.program + " X: " + this.x + " Y: " + this.y;
     }
     
 }

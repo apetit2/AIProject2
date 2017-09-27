@@ -46,13 +46,15 @@ public class AIproject2 extends Application {
         boolean first = false;
         
         //end_game file, go file, and move file names
-        String goTime = "AIProject2.go"; //change based upon what we want the program name to be
+        String goTime = "Example.go"; //change based upon what we want the program name to be
         String endTime = "end_game";
         String moveName = "move_file";
         
         String goPath = new File(goTime).getAbsolutePath();
         String endPath = new File(endTime).getAbsolutePath();
         String movePath = new File(moveName).getAbsolutePath();
+        File moveFile = new File(movePath);
+        
         
         
         //initialize the board
@@ -61,11 +63,15 @@ public class AIproject2 extends Application {
         //check if end file is in the directory
         boolean checkEnd = new File(endPath).exists();
         System.out.println("CheckEnd: " + checkEnd);
+        if(checkEnd){
+            return;
+        }
         
         //while the end file has not been added to the directory
         //keep checking to see if its our turn, and if it is we should
         //make a move
         while(checkEnd == false){
+            System.out.println(Arrays.toString(board[9]));
             //check if our go file is in the directory or not
             boolean checkTurn = new File(goPath).exists();
             System.out.println("Checkturn: " + checkTurn);
@@ -117,20 +123,40 @@ public class AIproject2 extends Application {
                 
                 //make our move here
                 Node n =  Utils.callMiniMax(board);
-                System.out.print(n.getX());
-                System.out.print(n.getY());
+                System.out.println(n.getX());
+                System.out.println(n.getY());
+                if(first){
+                    n.setColor("white");
+                } else {
+                    n.setColor("black");
+                }
                 
-                String ourMove = "AIProject2 " + n.getX() + " " + n.getY();
+                n.setIsOurNode(true);
+                n.setProgram("Example");
+                
+                
+                board[n.getX()][n.getY()] = n;
+                
+                String ourMove = n.getProgram() + " " + n.getX() + " " + n.getY();
 
+                moveFile = new File(movePath);
+                moveFile.delete();
                 //write our move out
                 Utils.writeMove(moveName, ourMove);
                 //move should be over now
+                
+                while((checkTurn = new File(goPath).exists()) == true){
+                    //do nothing
+                }
             }
             
             //check again to see if the end file is there, and if not we 
             //continue to loop and wait for our next turn
             checkEnd = new File(endPath).exists();
             System.out.println("CheckEnd: " + checkEnd);
+            if(checkEnd){
+                break;
+            }
             
             //we might need to make a check for the opponent file here and wait until it appears before continuing the loop
         }
