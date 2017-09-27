@@ -69,7 +69,6 @@ public class AIproject2 extends Application {
         //keep checking to see if its our turn, and if it is we should
         //make a move
         while(checkEnd == false){
-            System.out.println(Arrays.toString(board[9]));
             //check if our go file is in the directory or not
             boolean checkTurn = new File(goPath).exists();
             System.out.println("Checkturn: " + checkTurn);
@@ -81,92 +80,112 @@ public class AIproject2 extends Application {
                 String[] priorMove;
                 int column, row;
                 
-                //read previously made move (if not first move) 
-                try {
+                //boolean checkMove = new File(movePath).exists();
+                //if(checkMove){
                     
-                   //needed to read in the file 
-                   FileReader fr = new FileReader(moveName);
-                   BufferedReader br = new BufferedReader(fr);
+                    boolean shouldGo = true;
+                    //read previously made move (if not first move) 
+                    try {
+                    
+                        //needed to read in the file 
+                        FileReader fr = new FileReader(moveName);
+                        BufferedReader br = new BufferedReader(fr);
                    
-                   //read - in move 
-                   String sCurrentLine;
-                   sCurrentLine = br.readLine();//only should be one line
+                        //read - in move 
+                        String sCurrentLine;
+                        sCurrentLine = br.readLine();//only should be one line
                    
-                   System.out.println(sCurrentLine);
+                        System.out.println(sCurrentLine);
                    
-                   if(sCurrentLine == null){
-                       //no prior move was made
-                       //we are going first - so we are white
-                       first = true;
-                       br.close();
+                        if(sCurrentLine == null){
+                            //no prior move was made
+                            //we are going first - so we are white
+                            first = true;
                        
-                   } else {
-                       //a move was made read it in
-                       priorMove = sCurrentLine.split(" ");
-                       char tmp = priorMove[1].charAt(0);
-                       row = Integer.parseInt(priorMove[2]);
+                        } else {
+                            //a move was made read it in
+                            priorMove = sCurrentLine.split(" ");
+                            char tmp = priorMove[1].charAt(0);
+                            row = Integer.parseInt(priorMove[2]);
                        
-                       column = tmp - 'a' + 1;
+                            column = tmp - 'a' + 1;
                        
-                       System.out.println(priorMove[1]);
-                       System.out.println(priorMove[2]);
+                            System.out.println(column);
+                            System.out.println(priorMove[2]);
                        
-                       //update the board to reflect the previous move
-                       Utils.updateBoard(board, column, row, priorMove[0], first);
+                            //update the board to reflect the previous move
+                            
+                            if(!priorMove[0].equals("b")){
+                                Utils.updateBoard(board, column, row, priorMove[0], first);
+                                //make our move
+                                n =  Utils.callMiniMax(board);
                        
-                       br.close();
+                                System.out.println("here");
+                                System.out.println(n);
+                            } else {
+                                shouldGo = false;
+                                br.close();
+                                //continue;
+                            }
                        
-                       //make our move
-                       n =  Utils.callMiniMax(board);
-                   }
+                        }
+                        
+                        br.close();
                   
-                } catch (IOException e){
-                    System.out.println(e.getMessage());
-                    //something went very wrong -- we'll just forfeit if this happens
-                    //let the referee timeout - so maybe use wait
-                }
-                
-                //make our move here
-                if(n == null){
-                    Random rn = new Random();
+                    } catch (IOException e){
+                        System.out.println(e.getMessage());
+                        //something went very wrong -- we'll just forfeit if this happens
+                        //let the referee timeout - so maybe use wait
+                    }
+                    
+                    if(shouldGo){
+                        System.out.println(n);
+                        //make our move here
+                        if(n == null){
+                            Random rn = new Random();
                  
-                    n = new Node();
-                    n.setX(rn.nextInt(10 - 5 + 1) + 5);
-                    n.setY(rn.nextInt(10 - 5 + 1) + 5);
+                            n = new Node();
+                            n.setX(rn.nextInt(10 - 5 + 1) + 5);
+                            n.setY(rn.nextInt(10 - 5 + 1) + 5);
+                        }
+                        System.out.println(n.getX());
+                        System.out.println(n.getY());
+                        if(first){
+                            n.setColor("white");
+                        } else {
+                            n.setColor("black");
+                        }
+                
+                        n.setIsOurNode(true);
+                        n.setProgram("b");
+                
+                
+                        board[n.getX()][n.getY()] = n;
+                
+                        char outChar = (char) (n.getX() + 65);
+                
+                        String ourMove = n.getProgram() + " " + outChar + " " + (n.getY() + 1);
+                
+                        //write our move out
+                        Utils.writeMove(movePath, ourMove);
+                        //move should be over now
+                        
+                        while(checkTurn == true){
+                            checkTurn = new File(goPath).exists();
+                        }
+                
+                        System.out.println("got here");
+                    }
                 }
-                System.out.println(n.getX());
-                System.out.println(n.getY());
-                if(first){
-                    n.setColor("white");
-                } else {
-                    n.setColor("black");
-                }
-                
-                n.setIsOurNode(true);
-                n.setProgram("b");
-                
-                
-                board[n.getX()][n.getY()] = n;
-                
-                char outChar = (char) (n.getX() + 64);
-                
-                String ourMove = n.getProgram() + " " + outChar + " " + n.getY();
-                
-                //write our move out
-                Utils.writeMove(movePath, ourMove);
-                //move should be over now
-                
-                while((checkTurn = new File(goPath).exists()) == true){
-                    //do nothing
-                }
-            }
+            //}
             
             //check again to see if the end file is there, and if not we 
             //continue to loop and wait for our next turn
             checkEnd = new File(endPath).exists();
             System.out.println("CheckEnd: " + checkEnd);
             if(checkEnd){
-                break;
+                System.out.println("got here");
+                return;
             }
             
             //we might need to make a check for the opponent file here and wait until it appears before continuing the loop

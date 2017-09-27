@@ -70,7 +70,7 @@ public class Utils {
         BufferedWriter fw = null;
         try{
             System.out.println(ourMove);
-            fw = new BufferedWriter( new FileWriter(fileName, true));
+            fw = new BufferedWriter( new FileWriter(fileName, false));
             fw.write(ourMove);
             fw.close();
             
