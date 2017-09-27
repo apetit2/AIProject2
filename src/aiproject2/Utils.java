@@ -15,6 +15,10 @@ import java.util.ArrayList;
  */
 public class Utils {
     
+    public static String ourColor;
+    public static String theirColor;
+    
+    
     /**
      * Creates an initial board where neither player has made a move
      * @return a gomoku board where neither player has made a move 
@@ -34,14 +38,20 @@ public class Utils {
      * @param program - program name of the opponent program
      * @param isFirst - true if our program is first otherwise the opponent program is first
      */
-    public static void updateBoard(Node[][] board, int col, int row, String program, boolean isFirst){
+    public static void updateBoard(Node[][] board, int x, int y, String program, boolean isFirst){
         if(isFirst == false){ //we are black - they are white
-            board[col][row].setColor("white");
-            board[col][row].setProgram(program);
+            board[x][y].setColor("white");
+            board[x][y].setProgram(program);
+            board[x][y].setIsOurNode(false);
+            Utils.ourColor = "black";
+            Utils.theirColor = "white";
                            
         } else { //we are white - they are black
-        	board[col][row].setColor("black");
-            board[col][row].setProgram(program);               
+            board[x][y].setColor("black");
+            board[x][y].setProgram(program);
+            board[x][y].setIsOurNode(false);
+            Utils.ourColor = "white";
+            Utils.theirColor = "black";
         }
     }
     
@@ -126,7 +136,7 @@ public class Utils {
     // note that it only returns moves near other already filled spots on the board (but the tile filling that spot can be either color).
     // these aren't the only moves, but this makes the list of possible moves significantly smaller, and encompasses most (but not all) useful moves.
     public static ArrayList<Node> getMoves(Node[][] board){
-    	ArrayList<Node> moves = new ArrayList<Node>();
+    	ArrayList<Node> moves = new ArrayList<>();
     	
     	for (int x = 0; x < 15; x++) {                                            //scan all X
             for(int y = 0; y < 15; y++) {                                     //scan all y
@@ -147,6 +157,7 @@ public class Utils {
     //What we need is a new HValue function that evaluates the ENTIRE board and returns a score
     public static int evalBoard(Node[][] board){
     	return 0;
+        
     }
     // returns the Hvalue of a node based on the nodes around it.
     // the Hvalue is the largest combo that would be possible if Maximizer/Minimizer
@@ -156,13 +167,13 @@ public class Utils {
     // -whether both ends of that line will be open
     // -the maximum posssible length of that line (without being blocked)
     // -if defensive moves are more valuable
-    public static int Hvalue(Node[][] board, int col, int row, boolean isMax){
+    public static int Hvalue(Node[][] board, int x, int y, boolean isMax){
         int accumulator = 0;      // stores the largest possible combo,
-        if (board[col][row].getProgram() == null) { //if this node is empty
-            int HorizontalValueHolder = HorizontalValue(board, col, row, isMax);     // use holder so code doesnt need to make multiple passes through same function
-            int VerticalValueHolder = VerticalValue(board, col, row, isMax);
-            int FdiagonalValueHolder = FdiagonalValue(board, col, row, isMax);
-            int RdiagonalValueHolder = RdiagonalValue(board, col, row, isMax);
+        if (board[x][y].getProgram() == null) { //if this node is empty
+            int HorizontalValueHolder = HorizontalValue(board, x, y, isMax);     // use holder so code doesnt need to make multiple passes through same function
+            int VerticalValueHolder = VerticalValue(board, x, y, isMax);
+            int FdiagonalValueHolder = FdiagonalValue(board, x, y, isMax);
+            int RdiagonalValueHolder = RdiagonalValue(board, x, y, isMax);
             //Pretty sure there a function that can pick the highest value out of this set of 4
             if (HorizontalValueHolder  > accumulator){
                 accumulator = HorizontalValueHolder;  
@@ -190,17 +201,17 @@ public class Utils {
     // this function assumes that the node at X,Y is empty and looks at the nodes in X+-1 to see if they are occupied by
     // the passed player. If they are, it looks at the nodes beyond those, in the same line
     //PROBABLY NEEDS DEBUGGING BUT ASSUME IT WORKS
-    public static int HorizontalValue(Node[][] board, int col, int row, boolean isOurTurn){
+    public static int HorizontalValue(Node[][] board, int x, int y, boolean isOurTurn){
         int accumulator = 0;
         int mod = 1;
         // These will need to be fixed but basically this
-        while ((board[col - mod][row].getIsOurNode() == isOurTurn) && (mod < col)){  //check nodes to the right
+        while ((board[x - mod][y].getIsOurNode() == isOurTurn) && (mod < x)){  //check nodes to the right
             accumulator++;
             mod ++;
         }
       
         mod = 1;
-        while((board[col + mod][row].getIsOurNode() == isOurTurn) && ((mod + col) < 15)){  //check nodes to the left
+        while((board[x + mod][y].getIsOurNode() == isOurTurn) && ((mod + x) < 15)){  //check nodes to the left
             accumulator++;
             mod ++;
         }
@@ -212,16 +223,16 @@ public class Utils {
     // this function assumes that the node at X,Y is empty and looks at the nodes in Y+-1 to see if they are occupied by
     // the passed player. If they are, it looks at the nodes beyond those, in the same line
     //PROBABLY NEEDS DEBUGGING BUT ASSUME IT WORKS
-    public static int VerticalValue(Node[][] board, int col, int row, boolean isOurTurn){
+    public static int VerticalValue(Node[][] board, int x, int y, boolean isOurTurn){
         int accumulator = 0;
         int mod = 1;
         // These will need to be fixed but basically this
-        while ((board[col][row - mod].getIsOurNode() == isOurTurn) && (mod < row)){  //check nodes below
+        while ((board[x][y - mod].getIsOurNode() == isOurTurn) && (mod < y)){  //check nodes below
             accumulator++;
             mod ++;
         }
         mod = 1;
-        while((board[col][row + mod].getIsOurNode() == isOurTurn) && ((mod + row) < 15)){  //check nodes above
+        while((board[x][y + mod].getIsOurNode() == isOurTurn) && ((mod + y) < 15)){  //check nodes above
             accumulator++;
             mod++;
         }
@@ -231,16 +242,16 @@ public class Utils {
     // this function assumes that the node at X,Y is empty and looks at the nodes in X-1 Y-1 , X+1 Y+1 to see if they are occupied by
     // the passed player. If they are, it looks at the nodes beyond those, in the same line
     //PROBABLY NEEDS DEBUGGING BUT ASSUME IT WORKS
-    public static int FdiagonalValue(Node[][] board, int col, int row, boolean isOurTurn){
+    public static int FdiagonalValue(Node[][] board, int x, int y, boolean isOurTurn){
         int accumulator = 0;
         int mod = 1;
         // These will need to be fixed but basically this
-        while ((board[col - mod][row - mod].getIsOurNode() == isOurTurn) && (mod < row) && (mod < col)){  //check nodes to the lower right
+        while ((board[x - mod][y - mod].getIsOurNode() == isOurTurn) && (mod < y) && (mod < x)){  //check nodes to the lower right
             accumulator++;
             mod ++;
         }
         mod = 1;
-        while((board[col + mod][row + mod].getIsOurNode() == isOurTurn) && ((mod + col) < 15) && ((mod + row) < 15)){  //check nodes to the upper left
+        while((board[x + mod][y + mod].getIsOurNode() == isOurTurn) && ((mod + x) < 15) && ((mod + y) < 15)){  //check nodes to the upper left
             accumulator++;
             mod ++;
         }
@@ -250,16 +261,16 @@ public class Utils {
     // this function assumes that the node at X,Y is empty and looks at the nodes in X-1 Y+1 , X+1 Y-1 to see if they are occupied by
     // the passed player. If they are, it looks at the nodes beyond those, in the same line
     //PROBABLY NEEDS DEBUGGING BUT ASSUME IT WORKS
-    public static int RdiagonalValue(Node[][] board, int col, int row, boolean isOurTurn){
+    public static int RdiagonalValue(Node[][] board, int x, int y, boolean isOurTurn){
         int accumulator = 0;
         int mod = 1;
         // These will need to be fixed but basically this
-        while ((board[col - mod][row - mod].getIsOurNode() == isOurTurn) && (mod < row) && (mod < col)){  //check nodes to the upper right
+        while ((board[x - mod][y - mod].getIsOurNode() == isOurTurn) && (mod < y) && (mod < x)){  //check nodes to the upper right
             accumulator++;
             mod ++;
         }
         mod = 1;
-        while((board[col - mod][row - mod].getIsOurNode() == isOurTurn) && (mod < row) && (mod < col)){  //check nodes to the lower left
+        while((board[x - mod][y - mod].getIsOurNode() == isOurTurn) && (mod < y) && (mod < x)){  //check nodes to the lower left
             accumulator++;
             mod ++;
         }
