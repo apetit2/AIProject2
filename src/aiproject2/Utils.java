@@ -147,13 +147,85 @@ public class Utils {
     	for (int x = 0; x < 15; x++) {                                            //scan all X
             for(int y = 0; y < 15; y++) {                                     //scan all y
             	//if the spot on the board is empty, but adjacent to a filled spot (ours or an opponents)
-            	if (board[x][y] == null && (board[x+1][y] != null || board[x+1][y+1] != null || board[x][y+1] != null || board[x-1][y+1] != null || board[x-1][y] != null || board[x-1][y-1] != null || board[x][y-1] != null)) { 
-            		Node newMove = new Node();
-            		newMove.setX(x);
-            		newMove.setY(y);
+                if((x == 14)){
+                    if(y == 0){
+                        if (board[x][y] == null && (board[x][y+1] != null || board[x-1][y+1] != null || board[x-1][y] != null)) { 
+                            Node newMove = new Node();
+                            newMove.setX(x);
+                            newMove.setY(y);
             		
-            		moves.add(newMove);
-            	}
+                            moves.add(newMove);
+                        }
+                    } else if (y < 14) {
+                        if (board[x][y] == null && (board[x][y+1] != null || board[x-1][y+1] != null || board[x-1][y] != null || board[x-1][y-1] != null || board[x][y-1] != null)) { 
+                            Node newMove = new Node();
+                            newMove.setX(x);
+                            newMove.setY(y);
+            		
+                            moves.add(newMove);
+                        }
+                    } else if (y == 14){
+                        if (board[x][y] == null && (board[x-1][y] != null || board[x-1][y-1] != null || board[x][y-1] != null)) { 
+                            Node newMove = new Node();
+                            newMove.setX(x);
+                            newMove.setY(y);
+            		
+                            moves.add(newMove);
+                        }
+                    }
+                } else if (x == 0){
+                    if(y == 0){
+                        if (board[x][y] == null && (board[x][y+1] != null || board[x+1][y] != null || board[x+1][y+1] != null )) { 
+                            Node newMove = new Node();
+                            newMove.setX(x);
+                            newMove.setY(y);
+            		
+                            moves.add(newMove);
+                        }
+                    } else if (y < 14) {
+                        if (board[x][y] == null && (board[x][y+1] != null || board[x][y-1] != null || board[x+1][y] != null || board[x+1][y+1] != null || board[x + 1][y - 1] != null)) { 
+                            Node newMove = new Node();
+                            newMove.setX(x);
+                            newMove.setY(y);
+            		
+                            moves.add(newMove);
+                        }
+                    } else if (y == 14){
+                        if (board[x][y] == null && (board[x][y-1] != null || board[x+1][y] != null || board[x + 1][y - 1] != null)) { 
+                            Node newMove = new Node();
+                            newMove.setX(x);
+                            newMove.setY(y);
+            		
+                            moves.add(newMove);
+                        }
+                    }
+                } else if ( x < 14){
+                    if(y == 0){
+                        if (board[x][y] == null && (board[x][y+1] != null || board[x+1][y] != null || board[x+1][y+1] != null || board[x-1][y+1] != null || board[x-1][y] != null)) { 
+                            Node newMove = new Node();
+                            newMove.setX(x);
+                            newMove.setY(y);
+            		
+                            moves.add(newMove);
+                        }
+                    } else if (y < 14) {
+                        if (board[x][y] == null && (board[x][y+1] != null || board[x][y-1] != null || board[x+1][y] != null || board[x+1][y+1] != null || board[x + 1][y - 1] != null || board[x-1][y+1] != null || board[x-1][y] != null || board[x-1][y-1] != null)) { 
+                            Node newMove = new Node();
+                            newMove.setX(x);
+                            newMove.setY(y);
+            		
+                            moves.add(newMove);
+                        }
+                    } else if (y == 14){
+                        if (board[x][y] == null && (board[x][y-1] != null || board[x+1][y] != null || board[x + 1][y - 1] != null || board[x-1][y] != null || board[x-1][y-1] != null)) { 
+                            Node newMove = new Node();
+                            newMove.setX(x);
+                            newMove.setY(y);
+            		
+                            moves.add(newMove);
+                        }
+                    }
+                }
             }
     	}
     	

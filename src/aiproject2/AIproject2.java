@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 //UI Framework Stuff
@@ -48,11 +49,16 @@ public class AIproject2 extends Application {
         String endTime = "end_game";
         String moveName = "move_file";
         
+        String goPath = new File(goTime).getAbsolutePath();
+        String endPath = new File(endTime).getAbsolutePath();
+        String movePath = new File(moveName).getAbsolutePath();
+        
+        
         //initialize the board
         Node[][] board = Utils.initBoard();
         
         //check if end file is in the directory
-        boolean checkEnd = new File(endTime).exists();
+        boolean checkEnd = new File(endPath).exists();
         System.out.println("CheckEnd: " + checkEnd);
         
         //while the end file has not been added to the directory
@@ -60,7 +66,7 @@ public class AIproject2 extends Application {
         //make a move
         while(checkEnd == false){
             //check if our go file is in the directory or not
-            boolean checkTurn = new File(goTime).exists();
+            boolean checkTurn = new File(goPath).exists();
             System.out.println("Checkturn: " + checkTurn);
             
             //if it is, we make a move
@@ -80,6 +86,8 @@ public class AIproject2 extends Application {
                    //read - in move 
                    String sCurrentLine;
                    sCurrentLine = br.readLine();//only should be one line
+                   
+                   System.out.println(sCurrentLine);
                    
                    if(sCurrentLine == null){
                        //no prior move was made
@@ -117,7 +125,7 @@ public class AIproject2 extends Application {
             
             //check again to see if the end file is there, and if not we 
             //continue to loop and wait for our next turn
-            checkEnd = new File(endTime).exists();
+            checkEnd = new File(endPath).exists();
             System.out.println("CheckEnd: " + checkEnd);
             
             //we might need to make a check for the opponent file here and wait until it appears before continuing the loop
